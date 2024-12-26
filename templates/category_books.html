@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ category.name }}</h2>
+<p class="category-description">{{ category.description }}</p>
+
+<div class="books-grid">
+    {% for book in category.books %}
+    <div class="book-card">
+        {% if book.cover_image %}
+            <img src="{{ url_for('static', filename='book_covers/' + book.cover_image) }}"
+                 alt="Cover of {{ book.title }}"
+                 class="book-cover">
+        {% else %}
+            <img src="{{ url_for('static', filename='book_covers/default_cover.png') }}"
+                 alt="Default book cover"
+                 class="book-cover">
+        {% endif %}
+        <h3>{{ book.title }}</h3>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Genre:</strong> {{ book.genre }}</p>
+        <p class="description">{{ book.description }}</p>
+        <p class="status {{ 'available' if book.is_available else 'checked-out' }}">
+            Status: {{ 'Available' if book.is_available else 'Checked Out' }}
+        </p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Book Categories</h2>
+
+<div class="categories-grid">
+    {% for category in categories %}
+    <div class="category-card">
+        <h3>{{ category.name }}</h3>
+        <p>{{ category.description }}</p>
+        <p class="book-count">{{ category.books.count() }} books</p>
+        <a href="{{ url_for('category_books', category_id=category.id) }}" class="button">View Books</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

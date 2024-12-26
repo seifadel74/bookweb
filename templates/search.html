@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Search Books</h2>
+<form method="GET" class="search-form">
+    <input type="text" name="query" value="{{ query }}" placeholder="Search by title or author...">
+    <button type="submit" class="button">Search</button>
+</form>
+
+{% if query %}
+    <h3>Search Results</h3>
+    {% if results %}
+        <div class="books-grid">
+            {% for book in results %}
+                <div class="book-card">
+                    {% if book.cover_image %}
+                        <img src="{{ url_for('static', filename='book_covers/' + book.cover_image) }}"
+                             alt="Cover of {{ book.title }}"
+                             class="book-cover">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='book_covers/default_cover.png') }}"
+                             alt="Default book cover"
+                             class="book-cover">
+                    {% endif %}
+                    <h3>{{ book.title }}</h3>
+                    <p><strong>Author:</strong> {{ book.author }}</p>
+                    <p><strong>Genre:</strong> {{ book.genre }}</p>
+                    <p class="description">{{ book.description }}</p>
+                    <p class="status {{ 'available' if book.is_available else 'checked-out' }}">
+                        Status: {{ 'Available' if book.is_available else 'Checked Out' }}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No books found matching your search.</p>
+    {% endif %}
+{% endif %}
+{% endblock %} 

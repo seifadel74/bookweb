@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Library Catalog</h2>
+
+{% if books %}
+    <div class="books-grid">
+        {% for book in books %}
+            <div class="book-card">
+                {% if book.cover_image %}
+                    <img src="{{ url_for('static', filename='book_covers/' + book.cover_image) }}" 
+                         alt="Cover of {{ book.title }}"
+                         class="book-cover">
+                {% else %}
+                    <img src="{{ url_for('static', filename='book_covers/default_cover.png') }}"
+                         alt="Default book cover"
+                         class="book-cover">
+                {% endif %}
+                <h3>{{ book.title }}</h3>
+                <p><strong>Author:</strong> {{ book.author }}</p>
+                <p><strong>Genre:</strong> {{ book.genre }}</p>
+                <p><strong>Added:</strong> {{ book.added_date.strftime('%Y-%m-%d') }}</p>
+                <p class="description">{{ book.description }}</p>
+                <p class="status {{ 'available' if book.is_available else 'checked-out' }}">
+                    Status: {{ 'Available' if book.is_available else 'Checked Out' }}
+                </p>
+                {% if current_user.is_authenticated and (current_user.is_admin or current_user.id == book.user_id) %}
+                    <a href="{{ url_for('toggle_availability', book_id=book.id) }}" class="button">
+                        {{ 'Check Out' if book.is_available else 'Return' }}
+                    </a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No books in the library yet.</p>
+{% endif %}
+{% endblock %} 
